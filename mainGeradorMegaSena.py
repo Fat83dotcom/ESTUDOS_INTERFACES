@@ -23,32 +23,35 @@ class GeradorMega(QMainWindow, Ui_GeradorMegaSena):
     
     def engineMegaSena(self):
         self.btnGerador.setEnabled(False)
-        def gera_sena(lista):
-            for i in lista:
-                yield i
+        try:
+            def gera_sena(lista):
+                for i in lista:
+                    yield i
 
-        if self.qtdJogos.text() == '':
-            qtdJogos = 1
-        else:
-            qtdJogos = int(self.qtdJogos.text())
+            if self.qtdJogos.text() == '':
+                qtdJogos = 1
+            else:
+                qtdJogos = int(self.qtdJogos.text())
 
-        sena: list = []
-        for _ in range(qtdJogos):
-            jogo: list = []
-            while len(jogo) != 6:
-                ran = randint(1, 60)
-                if ran not in jogo:
-                    jogo.append(ran)
-                else:
-                    continue
-            sena.append(jogo)
+            sena: list = []
+            for _ in range(qtdJogos):
+                jogo: list = []
+                while len(jogo) != 6:
+                    ran = randint(1, 60)
+                    if ran not in jogo:
+                        jogo.append(ran)
+                    else:
+                        continue
+                sena.append(jogo)
 
-        sena = gera_sena(sena)
-        contador = count()
-        nJogo = count()
+            sena = gera_sena(sena)
+            contador = count()
+            nJogo = count()
 
-        while next(contador) < qtdJogos:
-            self.modelo.appendRow(QStandardItem(f'Jogo {next(nJogo) + 1}: {next(sena)}\n'))
+            while next(contador) < qtdJogos:
+                self.modelo.appendRow(QStandardItem(f'Jogo {next(nJogo) + 1}: {next(sena)}\n'))
+        except Exception as e:
+            self.modelo.appendRow(QStandardItem(f'{e.__class__.__name__}'))
 
 
 if __name__ == '__main__'    :
