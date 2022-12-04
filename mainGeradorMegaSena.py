@@ -1,45 +1,55 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from geradormegasena import *
+from random import randint
+from itertools import count
 
 
 class GeradorMega(QMainWindow, Ui_GeradorMegaSena):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         super().setupUi(self)
+        self.btnGerador.clicked.connect(self.engineMegaSena)
+        self.modelo = QStandardItemModel()
+        self.resultado.setModel(self.modelo)
+        self.qtdJogos.setMaxLength(3)
+        self.btnLimpador.clicked.connect(self.limparNumeros)
+    
+    def limparNumeros(self):
+        self.modelo.clear()
+        self.btnGerador.setEnabled(True)
+        self.qtdJogos.setText('')
     
     def engineMegaSena(self):
-        from random import randint
-from time import sleep
-from itertools import count
+        self.btnGerador.setEnabled(False)
+        def gera_sena(lista):
+            for i in lista:
+                yield i
 
+        if self.qtdJogos.text() == '':
+            qtdJogos = 1
+        else:
+            qtdJogos = int(self.qtdJogos.text())
 
-def gera_sena(lista):
-    for i in lista:
-        yield i
+        sena: list = []
+        for _ in range(qtdJogos):
+            jogo: list = []
+            while len(jogo) != 6:
+                ran = randint(1, 60)
+                if ran not in jogo:
+                    jogo.append(ran)
+                else:
+                    continue
+            sena.append(jogo)
 
+        sena = gera_sena(sena)
+        contador = count()
+        nJogo = count()
 
-    n_jogo = int(input('Quantos jogos você quer gerar? '))
+        while next(contador) < qtdJogos:
+            self.modelo.appendRow(QStandardItem(f'Jogo {next(nJogo) + 1}: {next(sena)}\n'))
 
-    sena = []
-
-    for i in range(n_jogo):
-        jogo: list = []
-        while len(jogo) != 6:
-            ran = randint(1, 60)
-            if ran not in jogo:
-                jogo.append(ran)
-            else:
-                continue
-        sena.append(jogo)
-
-    s = gera_sena(sena)
-    c = count()
-    d = count()
-
-    while next(c) < n_jogo:
-        print(f'Jogo {next(d) + 1}: {next(s)}')
-        sleep(0.5)
 
 if __name__ == '__main__'    :
     qt = QApplication(sys.argv)
