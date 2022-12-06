@@ -24,27 +24,23 @@ class GeradorMega(QMainWindow, Ui_GeradorMegaSena):
     def engineMegaSena(self):
         self.btnGerador.setEnabled(False)
         try:
-            def gera_sena(lista):
-                for i in lista:
-                    yield i
-
             if self.qtdJogos.text() == '':
                 qtdJogos = 1
             else:
                 qtdJogos = int(self.qtdJogos.text())
 
-            sena: list = []
-            for _ in range(qtdJogos):
-                jogo: list = []
-                while len(jogo) != 6:
-                    ran = randint(1, 60)
-                    if ran not in jogo:
-                        jogo.append(ran)
-                    else:
-                        continue
-                sena.append(jogo)
+            def gera_sena(qtd_jogos):
+                for _ in range(qtd_jogos):
+                    jogo: list = []
+                    while len(jogo) != 6:
+                        palpite = randint(1, 60)
+                        if palpite not in jogo:
+                            jogo.append(palpite)
+                        else:
+                            continue
+                    yield jogo
 
-            sena = gera_sena(sena)
+            sena = gera_sena(qtdJogos)
             contador = count()
             nJogo = count()
 
