@@ -11,10 +11,10 @@ class GeradorMega(QMainWindow, Ui_GeradorMegaSena):
         super().__init__(parent)
         super().setupUi(self)
         self.btnGerador.clicked.connect(self.engineMegaSena)
+        self.btnLimpador.clicked.connect(self.limparNumeros)
         self.modelo = QStandardItemModel()
         self.resultado.setModel(self.modelo)
         self.qtdJogos.setMaxLength(3)
-        self.btnLimpador.clicked.connect(self.limparNumeros)
     
     def limparNumeros(self):
         self.modelo.clear()
@@ -36,8 +36,6 @@ class GeradorMega(QMainWindow, Ui_GeradorMegaSena):
                         palpite = randint(1, 60)
                         if palpite not in jogo:
                             jogo.append(palpite)
-                        else:
-                            continue
                     yield jogo
 
             sena = gera_sena(qtdJogos)
@@ -50,7 +48,7 @@ class GeradorMega(QMainWindow, Ui_GeradorMegaSena):
             self.modelo.appendRow(QStandardItem(f'{e.__class__.__name__}'))
 
 
-if __name__ == '__main__'    :
+if __name__ == '__main__':
     qt = QApplication(sys.argv)
     appMain = GeradorMega()
     appMain.show()
