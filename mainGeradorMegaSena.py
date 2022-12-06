@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
-from geradormegasena import *
+from geradormegasena import Ui_GeradorMegaSena
 from random import randint
 from itertools import count
 
